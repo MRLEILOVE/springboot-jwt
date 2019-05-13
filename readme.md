@@ -7,7 +7,7 @@
 #### 补充
 - ##### JWT认证流程：
 
-![img](https://img-blog.csdn.net/20170729233023711?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWt1bjEwMDg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+    ![img](https://img-blog.csdn.net/20170729233023711?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWt1bjEwMDg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 	1、用户使用用户名密码来请求服务器 
 	2、服务器进行验证用户的信息 
 	3、服务器通过验证发送给用户一个token 
@@ -25,21 +25,22 @@
 	3、实现Web应用的单点登录。
 
 - ##### JWT长什么样
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511170109596.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511170120638.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
+    ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511170109596.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
+    ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511170120638.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
 
 
 - ##### 八幅漫画理解使用JSON Web Token设计单点登录系统
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133619454.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133637715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133649193.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133704754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
+    ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133619454.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
+    ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133637715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
+    ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133649193.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
+    ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133704754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
 - ##### 和Session方式存储id的差异
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133836435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
+    ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511133836435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0ODQ1Mzk0,size_16,color_FFFFFF,t_70)
 
 ## SpringBoot + JWT
 我参考下面的文章实现了
 
+- [各类JWT库(java)的使用与评价](http://andaily.com/blog/?p=956)
 - [SpringBoot集成JWT实现token验证](https://www.jianshu.com/p/e88d3f8151db)
 - [Spring Boot整合JWT实现用户认证](https://blog.csdn.net/ltl112358/article/details/79507148)
 
@@ -56,8 +57,8 @@
 </dependency>
 ```
 
-源码：
+源码：https://github.com/MRLEILOVE/springboot-jwt
 
 > ## 参考
-> https://blog.csdn.net/qiuyinthree/article/details/80811937
-> https://www.cnblogs.com/dinglinyong/p/6611151.html
+> - https://blog.csdn.net/qiuyinthree/article/details/80811937
+> - https://www.cnblogs.com/dinglinyong/p/6611151.html
