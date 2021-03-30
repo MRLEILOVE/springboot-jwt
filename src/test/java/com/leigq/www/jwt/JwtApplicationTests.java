@@ -11,6 +11,7 @@ public class JwtApplicationTests {
 
     @Test
     public void contextLoads() {
+        System.out.println(1);
     }
 
 }
