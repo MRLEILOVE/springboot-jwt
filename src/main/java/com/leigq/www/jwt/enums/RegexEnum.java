@@ -1,4 +1,4 @@
-package com.leigq.www.jwt.bean;
+package com.leigq.www.jwt.enums;
 
 import lombok.Getter;
 

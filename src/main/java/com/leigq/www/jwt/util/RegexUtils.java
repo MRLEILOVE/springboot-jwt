@@ -1,6 +1,6 @@
 package com.leigq.www.jwt.util;
 
-import com.leigq.www.jwt.bean.RegexEnum;
+import com.leigq.www.jwt.enums.RegexEnum;
 
 import java.util.regex.Pattern;
 
