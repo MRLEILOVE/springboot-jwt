@@ -17,32 +17,43 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    /**
-     * The Id.
-     */
-    private Long id;
+	/**
+	 * The Id.
+	 */
+	private Long id;
 
-    private String userName;
+	/**
+	 * The User name.
+	 */
+	private String userName;
 
-    private String passWord;
+	/**
+	 * The Mobile.
+	 */
+	private String mobile;
 
-    /**
-     * Check user name boolean.
-     *
-     * @param userName the user name
-     * @return the boolean
-     */
-    public boolean checkUserName(String userName) {
+	/**
+	 * The Pass word.
+	 */
+	private String passWord;
+
+	/**
+	 * Check user name boolean.
+	 *
+	 * @param userName the user name
+	 * @return the boolean
+	 */
+	public boolean checkUserName(String userName) {
         return Objects.equals(userName, this.userName);
     }
 
-    /**
-     * Check pwd boolean.
-     *
-     * @param pwd the pwd
-     * @return the boolean
-     */
-    public boolean checkPwd(String pwd) {
+	/**
+	 * Check pwd boolean.
+	 *
+	 * @param pwd the pwd
+	 * @return the boolean
+	 */
+	public boolean checkPwd(String pwd) {
         return Objects.equals(pwd, this.passWord);
     }
 

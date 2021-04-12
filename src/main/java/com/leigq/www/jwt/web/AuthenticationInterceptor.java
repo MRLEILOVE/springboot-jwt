@@ -4,9 +4,11 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.leigq.www.jwt.annotation.PassToken;
+import com.leigq.www.jwt.bean.RedisCacheUser;
 import com.leigq.www.jwt.config.JwtProperties;
-import com.leigq.www.jwt.entity.User;
+import com.leigq.www.jwt.service.RedisTokenStore;
 import com.leigq.www.jwt.util.CookieUtils;
+import com.leigq.www.jwt.util.DeviceUtils;
 import com.leigq.www.jwt.util.IpUtils;
 import com.leigq.www.jwt.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
 	private final JwtProperties jwtProperties;
 	private final JwtUtils jwtUtils;
+	private final RedisTokenStore redisTokenStore;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -51,28 +54,33 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			return true;
 		}
 
-		// 从 Cookie 中取出 accessToken
-		final String accessToken = CookieUtils.getCookieValue(request, jwtProperties.getTokenCookieName());
+		// 从 Cookie 中取出 token
+		final String token = CookieUtils.getCookieValue(request, jwtProperties.getTokenCookieName());
 
 		// 剩余请求都需要登录
-		if (StringUtils.isBlank(accessToken)) {
-			throw new ServiceException("无效token，请重新登录!");
+		if (StringUtils.isBlank(token)) {
+			throw new ServiceException("登录失效，请重新登录!");
 		}
 
 		try {
 			// 解析 jwt
-			final DecodedJWT decodedJwt = jwtUtils.parse(new String(Base64Utils.decodeFromString(accessToken)));
+			final DecodedJWT decodedJwt = jwtUtils.parse(new String(Base64Utils.decodeFromString(token)));
 
-			// 获取 accessToken 中的 userId
+			// 获取 token 中的 userId
 			String userId = decodedJwt.getSubject();
 
-			// 获取 accessToken 中的 audience (用户名)
+			// 获取 token 中的 audience (用户名)
 			log.info("userName = {}", decodedJwt.getAudience().get(0));
 
-			// 根据 userId 去数据库查询用户，这里我省略就不去查询数据库了，使用模拟数据，在这里可以增加自己项目的业务，比如：判断用户是否被禁用
-			User user = User.builder().id(Long.valueOf(userId)).userName("admin").passWord("123456").build();
-			if (Objects.isNull(user)) {
-				throw new ServiceException("用户不存在，请重新登录");
+			// 根据 userId 去缓存查询用户，在这里可以增加自己项目的业务，比如：判断用户是否被禁用
+			final RedisCacheUser cacheUser = redisTokenStore.get(Long.parseLong(userId), DeviceUtils.platform(request));
+			if (Objects.isNull(cacheUser)) {
+				throw new ServiceException("登录失效，请重新登录!");
+			}
+
+			// Cookie 中的 token 和缓存中的 token 比较
+			if (!cacheUser.getToken().equals(token)) {
+				throw new ServiceException("登录失效，请重新登录!");
 			}
 
 			// Claim中存放的内容是JWT自身的标准属性
@@ -84,12 +92,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
 			// 当前请求用户的ip和 jwt中的是否一致
 			if (!IpUtils.realIp(request).equals(ip)) {
-				throw new ServiceException("无效token，请重新登录!");
+				throw new ServiceException("登录失效，请重新登录!");
 			}
 		} catch (JWTVerificationException ex) {
 			log.error("jwt 解析异常：", ex);
 			// 全局异常捕获
-			throw new ServiceException("用户登录失效，请重新登录");
+			throw new ServiceException("登录失效，请重新登录");
 		}
 
 		// 进行逻辑判断，如果ok就返回true，不行就返回false，返回false就不会处理改请求

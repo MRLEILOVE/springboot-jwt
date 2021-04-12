@@ -58,16 +58,16 @@ public class UserController {
 	 * @return the user
 	 */
 	@PassToken
-	@PostMapping("/login")
+	@RequestMapping("/login")
 	public Response login(String userName, String passWord, HttpServletRequest request, HttpServletResponse response) {
 		// 根据 userName 去数据库查询用户，这里我省略就不去查询数据库了，使用模拟数据
-		User user = User.builder().id(10010L).userName("admin").passWord("123456").build();
+		User user = User.builder().id(10010L).userName("admin").passWord("123456").mobile("11111111111").build();
 
 		if (!user.checkUserName(userName) || !user.checkPwd(passWord)) {
 			return Response.fail("用户名或密码错误！");
 		}
 
-		return Response.success(userService.buildLoginUser(user.getId(), userName, request, response));
+		return Response.success(userService.buildLoginUser(user, request, response));
 	}
 
 
@@ -77,7 +77,7 @@ public class UserController {
 	 * @return the user
 	 */
 	@PassToken
-	@PostMapping("/token/refresh")
+	@RequestMapping("/token/refresh")
 	public Response refreshToken(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			// 获取 token
@@ -108,7 +108,7 @@ public class UserController {
 			if (!IpUtils.realIp(request).equals(ip)) {
 				return Response.fail("refreshToken无效，请重新登录");
 			}
-			return Response.success(userService.buildLoginUser(Long.valueOf(userId), userName, request, response));
+			return Response.success(userService.buildLoginUser(new User(Long.parseLong(userId), userName, "11111111111", ""), request, response));
 		} catch (JWTVerificationException e) {
 			log.error("refreshToken解析失败:", e);
 			return Response.fail("refreshToken解析失败");
