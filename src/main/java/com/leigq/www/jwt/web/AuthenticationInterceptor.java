@@ -6,7 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.leigq.www.jwt.annotation.PassToken;
 import com.leigq.www.jwt.config.JwtProperties;
 import com.leigq.www.jwt.entity.User;
-import com.leigq.www.jwt.util.IpUtil;
+import com.leigq.www.jwt.util.IpUtils;
 import com.leigq.www.jwt.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -83,7 +83,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			log.info("ip = {}", ip);
 
 			// 当前请求用户的ip和 jwt中的是否一致
-			if (!IpUtil.realIp(request).equals(ip)) {
+			if (!IpUtils.realIp(request).equals(ip)) {
 				throw new ServiceException("无效token，请重新登录!");
 			}
 		} catch (JWTVerificationException ex) {
