@@ -1,6 +1,20 @@
 jwt:
-  sign-secret: '123456'
-  issuer: 'springboot-jwt'
   expires-in: 7200s
-  token-cookie-name: 'token'
-  refresh-token-cookie-name: 'refreshToken'
+  issuer: springboot-jwt
+  refresh-token-cookie-name: refreshToken
+  sign-secret: 123456
+  token-cookie-name: token
+spring:
+  redis:
+    database: 1
+    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: 1000000s
+        min-idle: 1
+      shutdown-timeout: 100s
+    password: 111111
+    port: 6379
+    timeout: 3000000s
