@@ -63,11 +63,6 @@ public class UserService {
 		final String tokenBase64 = Base64Utils.encodeToString(accessToken.getBytes(StandardCharsets.UTF_8));
 		final String refreshTokenBase64 = Base64Utils.encodeToString(refreshToken.getBytes(StandardCharsets.UTF_8));
 
-		// 构建登录用户
-		final LoginUser loginUser = LoginUser.builder()
-				.tokenExpiresAt(expiresAt)
-				.build();
-
 		// 将 token 放入 cookie 中, 防止 XSS 攻击
 		CookieUtils.setSecurityCookie(response, jwtProperties.getTokenCookieName(), tokenBase64, (int) expiresIn);
 
@@ -82,6 +77,12 @@ public class UserService {
 				.userName(user.getUserName())
 				.build();
 		redisTokenStore.save(cacheUser, DeviceUtils.platform(request), (int) expiresIn);
-		return loginUser;
+
+		// 构建登录用户
+		return LoginUser.builder()
+				.userId(user.getId())
+				.mobile(user.getMobile())
+				.tokenExpiresAt(expiresAt)
+				.build();
 	}
 }

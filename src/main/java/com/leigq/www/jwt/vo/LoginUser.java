@@ -23,6 +23,11 @@ public class LoginUser implements Serializable {
 
 	private static final long serialVersionUID = 8851375458710488656L;
 
+
+	private Long userId;
+
+	private String mobile;
+
 	/**
 	 * token 过期时间
 	 */
