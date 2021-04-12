@@ -1,35 +1,47 @@
 package com.leigq.www.jwt.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.Accessors;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 /**
- * User
- * <p>
- * 创建人：LeiGQ <br>
- * 创建时间：2019-05-11 14:03 <br>
- * <p>
- * 修改人： <br>
- * 修改时间： <br>
- * 修改备注： <br>
- * </p>
+ * User 实体
+ *
+ * @author leigq
  */
 @Data
 @Builder
-@Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
+    /**
+     * The Id.
+     */
     private Long id;
-    private String userName;
-    private String passWord;
-    private String token;
 
+    private String userName;
+
+    private String passWord;
+
+    /**
+     * Check user name boolean.
+     *
+     * @param userName the user name
+     * @return the boolean
+     */
     public boolean checkUserName(String userName) {
         return Objects.equals(userName, this.userName);
     }
 
+    /**
+     * Check pwd boolean.
+     *
+     * @param pwd the pwd
+     * @return the boolean
+     */
     public boolean checkPwd(String pwd) {
         return Objects.equals(pwd, this.passWord);
     }
