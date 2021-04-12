@@ -39,7 +39,6 @@ public class UserService {
 	 * @param userName the user name
 	 * @return the login user
 	 */
-	@SneakyThrows
 	public LoginUser buildLoginUser(Long userId, String userName, HttpServletRequest request, HttpServletResponse response) {
 		// 有效时间
 		final long expiresIn = jwtProperties.getExpiresIn().getSeconds();

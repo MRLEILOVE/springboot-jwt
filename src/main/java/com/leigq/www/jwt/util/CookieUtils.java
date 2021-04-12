@@ -83,22 +83,12 @@ public class CookieUtils {
 	 * @param value    the value
 	 * @param maxValue the max value
 	 */
-	public static void setCookie(HttpServletResponse response, String name, String value, int maxValue) throws IOException {
-		if (Objects.isNull(name) || name.trim().length() == 0) {
+	public static void setCookie(HttpServletResponse response, String name, String value, int maxValue) {
+		final Cookie cookie = generate(name, value, maxValue);
+		if (cookie == null) {
 			return;
 		}
-		if (null == value) {
-			value = "";
-		}
-		Cookie cookie = new Cookie(name, value);
-		cookie.setPath("/");
-		if (maxValue != 0) {
-			cookie.setMaxAge(maxValue);
-		} else {
-			cookie.setMaxAge(COOKIE_HALF_HOUR);
-		}
 		response.addCookie(cookie);
-		response.flushBuffer();
 	}
 
 
@@ -109,7 +99,43 @@ public class CookieUtils {
 	 * @param name     the name
 	 * @param value    the value
 	 */
-	public static void setCookie(HttpServletResponse response, String name, String value) throws IOException {
+	public static void setCookie(HttpServletResponse response, String name, String value) {
 		setCookie(response, name, value, COOKIE_HALF_HOUR);
+	}
+
+
+	/**
+	 * 添加一条新的Cookie，安全
+	 *
+	 * @param response the response
+	 * @param name     the name
+	 * @param value    the value
+	 */
+	public static void setSecurityCookie(HttpServletResponse response, String name, String value, int maxValue) {
+		final Cookie cookie = generate(name, value, maxValue);
+		if (cookie == null) {
+			return;
+		}
+		cookie.setHttpOnly(true);
+		cookie.setSecure(true);
+		response.addCookie(cookie);
+	}
+
+	/**
+	 * Generate cookie.
+	 *
+	 * @param name     the name
+	 * @param value    the value
+	 * @param maxValue the max value
+	 * @return the cookie
+	 */
+	public static Cookie generate(String name, String value, int maxValue) {
+		if (Objects.isNull(name) || name.trim().length() == 0) {
+			return null;
+		}
+		Cookie cookie = new Cookie(name, value == null ? "" : value);
+		cookie.setPath("/");
+		cookie.setMaxAge(maxValue != 0 ? maxValue : COOKIE_HALF_HOUR);
+		return cookie;
 	}
 }
