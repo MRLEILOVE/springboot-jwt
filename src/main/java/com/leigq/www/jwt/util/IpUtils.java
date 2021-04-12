@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletRequest;
  * @author leigq
  * @date 2021 -04-10 16:39:38
  */
-public final class IpUtil {
+public final class IpUtils {
 
 	/**
 	 * Instantiates a new Ip util.
 	 */
-	private IpUtil() {
+	private IpUtils() {
 
 	}
 
