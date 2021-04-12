@@ -10,11 +10,14 @@ import java.time.Duration;
  * JwtProperties
  *
  * @author leigq
- * @date 2021-04-10 13:49:40
+ * @date 2021 -04-10 13:49:40
  */
 @Data
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties implements Serializable {
+	/**
+	 * The constant serialVersionUID.
+	 */
 	private static final long serialVersionUID = 6653274237419642531L;
 
 	/**
@@ -28,13 +31,18 @@ public class JwtProperties implements Serializable {
 	private String issuer;
 
 	/**
-	 * 前端放 jwt 的请求头的 key
-	 */
-	private String headerKey;
-
-	/**
 	 * 有效时间
 	 */
 	private Duration expiresIn;
+
+	/**
+	 * token 放 Cookie 中的名称
+	 */
+	private String tokenCookieName;
+
+	/**
+	 * refreshToken 放 Cookie 中的名称
+	 */
+	private String refreshTokenCookieName;
 
 }

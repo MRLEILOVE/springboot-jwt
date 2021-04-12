@@ -1,5 +1,6 @@
 jwt:
-  signSecret: '123456'
+  sign-secret: '123456'
   issuer: 'springboot-jwt'
-  headerKey: 'Authorization'
-  expiresIn: 7200s
+  expires-in: 7200s
+  token-cookie-name: 'token'
+  refresh-token-cookie-name: 'refreshToken'

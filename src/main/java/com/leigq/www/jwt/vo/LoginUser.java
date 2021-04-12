@@ -1,5 +1,6 @@
 package com.leigq.www.jwt.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,18 +24,9 @@ public class LoginUser implements Serializable {
 	private static final long serialVersionUID = 8851375458710488656L;
 
 	/**
-	 * The Token.
+	 * token 过期时间
 	 */
-	private String token;
-
-	/**
-	 * The Refresh token.
-	 */
-	private String refreshToken;
-
-	/**
-	 * 过期时间
-	 */
-	private Date expiresAt;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date tokenExpiresAt;
 
 }

@@ -6,20 +6,20 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.leigq.www.jwt.annotation.PassToken;
 import com.leigq.www.jwt.config.JwtProperties;
 import com.leigq.www.jwt.entity.User;
+import com.leigq.www.jwt.util.CookieUtils;
 import com.leigq.www.jwt.util.IpUtils;
 import com.leigq.www.jwt.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Map;
 import java.util.Objects;
 
@@ -51,8 +51,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			return true;
 		}
 
-		// 从 http 请求头中取出 accessToken
-		String accessToken = request.getHeader(jwtProperties.getHeaderKey());
+		// 从 Cookie 中取出 accessToken
+		final String accessToken = CookieUtils.getCookieValue(request, jwtProperties.getTokenCookieName());
 
 		// 剩余请求都需要登录
 		if (StringUtils.isBlank(accessToken)) {
@@ -61,7 +61,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
 		try {
 			// 解析 jwt
-			final DecodedJWT decodedJwt = jwtUtils.parse(new String(Base64.getDecoder().decode(accessToken.getBytes(StandardCharsets.UTF_8))));
+			final DecodedJWT decodedJwt = jwtUtils.parse(new String(Base64Utils.decodeFromString(accessToken)));
 
 			// 获取 accessToken 中的 userId
 			String userId = decodedJwt.getSubject();
