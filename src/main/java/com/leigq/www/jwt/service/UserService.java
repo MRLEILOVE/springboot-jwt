@@ -1,7 +1,7 @@
 package com.leigq.www.jwt.service;
 
 import com.leigq.www.jwt.config.JwtProperties;
-import com.leigq.www.jwt.util.IpUtil;
+import com.leigq.www.jwt.util.IpUtils;
 import com.leigq.www.jwt.util.JwtUtils;
 import com.leigq.www.jwt.vo.LoginUser;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class UserService {
 
 		// 生成 token
 		Map<String, String> customClaim = new HashMap<>(1);
-		customClaim.put("ip", IpUtil.realIp(request));
+		customClaim.put("ip", IpUtils.realIp(request));
 		final String accessToken = jwtUtils.generate(customClaim, userId + "", expiresAt, userName);
 
 		// 生成 refreshToken，用于当 token 过期时刷新 token
