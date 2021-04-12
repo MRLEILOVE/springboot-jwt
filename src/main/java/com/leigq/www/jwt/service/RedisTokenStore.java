@@ -1,6 +1,6 @@
 package com.leigq.www.jwt.service;
 
-import com.leigq.www.jwt.bean.RedisCacheUser;
+import com.leigq.www.jwt.bean.CacheLoginUser;
 import com.leigq.www.jwt.constant.RedisCacheKey;
 import com.leigq.www.jwt.enums.Platform;
 import com.leigq.www.jwt.util.RedisUtils;
@@ -30,7 +30,7 @@ public class RedisTokenStore {
 	 * @param expiresIn the expires in
 	 * @return the boolean
 	 */
-	public boolean save(RedisCacheUser cacheUser, Platform scope, int expiresIn) {
+	public boolean save(CacheLoginUser cacheUser, Platform scope, int expiresIn) {
 		return redisUtils.string.set(String.format(RedisCacheKey.CACHE_USER_KEY_FORMAT, cacheUser.getUserId(), scope.getPlatform()), cacheUser, expiresIn);
 	}
 
@@ -42,7 +42,7 @@ public class RedisTokenStore {
 	 * @param scope  the scope
 	 * @return the boolean
 	 */
-	public RedisCacheUser get(long userId, Platform scope) {
+	public CacheLoginUser get(long userId, Platform scope) {
 		return redisUtils.string.get(String.format(RedisCacheKey.CACHE_USER_KEY_FORMAT, userId, scope.getPlatform()));
 	}
 

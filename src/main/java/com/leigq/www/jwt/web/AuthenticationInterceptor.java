@@ -4,7 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.leigq.www.jwt.annotation.PassToken;
-import com.leigq.www.jwt.bean.RedisCacheUser;
+import com.leigq.www.jwt.bean.CacheLoginUser;
 import com.leigq.www.jwt.config.JwtProperties;
 import com.leigq.www.jwt.service.RedisTokenStore;
 import com.leigq.www.jwt.util.CookieUtils;
@@ -73,7 +73,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			log.info("userName = {}", decodedJwt.getAudience().get(0));
 
 			// 根据 userId 去缓存查询用户，在这里可以增加自己项目的业务，比如：判断用户是否被禁用
-			final RedisCacheUser cacheUser = redisTokenStore.get(Long.parseLong(userId), DeviceUtils.platform(request));
+			final CacheLoginUser cacheUser = redisTokenStore.get(Long.parseLong(userId), DeviceUtils.platform(request));
 			if (Objects.isNull(cacheUser)) {
 				throw new ServiceException("登录失效，请重新登录!");
 			}

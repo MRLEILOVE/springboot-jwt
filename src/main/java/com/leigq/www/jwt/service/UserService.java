@@ -1,6 +1,6 @@
 package com.leigq.www.jwt.service;
 
-import com.leigq.www.jwt.bean.RedisCacheUser;
+import com.leigq.www.jwt.bean.CacheLoginUser;
 import com.leigq.www.jwt.config.JwtProperties;
 import com.leigq.www.jwt.entity.User;
 import com.leigq.www.jwt.util.CookieUtils;
@@ -70,7 +70,7 @@ public class UserService {
 		CookieUtils.setSecurityCookie(response, jwtProperties.getRefreshTokenCookieName(), refreshTokenBase64, (int) expiresIn * 2);
 
 		// 将 token 存入缓存
-		RedisCacheUser cacheUser = RedisCacheUser.builder()
+		CacheLoginUser cacheUser = CacheLoginUser.builder()
 				.token(tokenBase64)
 				.userId(user.getId())
 				.mobile(user.getMobile())

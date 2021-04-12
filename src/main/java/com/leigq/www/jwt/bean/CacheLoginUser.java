@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RedisCacheUser implements Serializable {
+public class CacheLoginUser implements Serializable {
 
 	/**
 	 * The constant serialVersionUID.

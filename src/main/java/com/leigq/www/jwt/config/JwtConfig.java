@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Data
 @Configuration
 @EnableConfigurationProperties(value = JwtProperties.class)
-public class JwtConfiguration implements Serializable {
+public class JwtConfig implements Serializable {
 	private static final long serialVersionUID = 6653274237419642531L;
 
 }
