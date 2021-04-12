@@ -1,17 +1,3 @@
-## 入门教程
-
-[JSON Web Token 入门教程 - 阮一峰](http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html)
-
-#### 补充
-- ##### JWT认证流程：
-
-    ![img](https://img-blog.csdn.net/20170729233023711?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWt1bjEwMDg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-	
-    1. 用户使用用户名密码来请求服务器 
-	2. 服务器进行验证用户的信息 
-	3. 服务器通过验证发送给用户一个token 
-	4. 客户端存储token，并在每次请求时附送上这个token值 
-	5. 服务端验证token值，并返回数据
 
 ## 基础概念
 
