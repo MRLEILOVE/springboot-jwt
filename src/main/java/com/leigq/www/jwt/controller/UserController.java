@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -103,7 +102,7 @@ public class UserController {
 			final String userName = decodedJwt.getAudience().get(0);
 
 			// 获取ip
-			final String ip = decodedJwt.getClaims( ).get("ip").asString();
+			final String ip = decodedJwt.getClaims().get("ip").asString();
 
 			if (!IpUtils.realIp(request).equals(ip)) {
 				return Response.fail("refreshToken无效，请重新登录");
