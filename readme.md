@@ -5,11 +5,10 @@
 
 - [JSON Web Token的使用](https://www.cnblogs.com/dinglinyong/p/6611151.html)
 
-
-![img](https://img-blog.csdn.net/20170729233023711?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWt1bjEwMDg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-
-
 jwt验证流程如下：
+
+![jwt认证流程](https://leigq-blog.oss-cn-shenzhen.aliyuncs.com/PicGojwt认证流程.jpg)
+
 
 1. 用户使用用户名密码来请求服务器
 2. 服务器进行验证用户的信息
@@ -23,7 +22,6 @@ jwt验证流程如下：
 1. 用于向Web应用传递一些非敏感信息。例如完成加好友、下订单的操作等等。
 2. 用于设计用户认证和授权系统。
 3. 实现Web应用的单点登录。
-
 
 
 ## SpringBoot + JWT 实战
