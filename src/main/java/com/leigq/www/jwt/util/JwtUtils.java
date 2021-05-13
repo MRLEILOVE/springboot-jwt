@@ -7,8 +7,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.leigq.www.jwt.config.JwtProperties;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
@@ -19,15 +17,9 @@ import java.util.*;
  *
  * @author leigq
  */
-@RequiredArgsConstructor
-@Component
 public final class JwtUtils {
 
-	/**
-	 * The Jwt properties.
-	 */
-	private final JwtProperties jwtProperties;
-
+    private static final JwtProperties JWT_PROPERTIES = SpringContextHolder.getBean(JwtProperties.class);
 
 	/**
 	 * 生成 jwt
@@ -37,7 +29,7 @@ public final class JwtUtils {
 	 * @param audience  接受签名的受众
 	 * @return the string
 	 */
-	public String generate(String subject, Date expiresAt, String... audience) {
+	public static String generate(String subject, Date expiresAt, String... audience) {
 		return generate(null, subject, expiresAt, audience);
 	}
 
@@ -51,9 +43,8 @@ public final class JwtUtils {
 	 * @param audience    接受 jwt 的一方，类似用户名
 	 * @return the string
 	 */
-	public String generate(Map<String, String> customClaim, String subject, Date expiresAt, String... audience) {
-
-		final JWTCreator.Builder builder = JWT.create();
+	public static String generate(Map<String, String> customClaim, String subject, Date expiresAt, String... audience) {
+        final JWTCreator.Builder builder = JWT.create();
 
 		/* 设置头部信息 Header，可以不设置，使用默认值 */
 		builder.withHeader(new HashMap<>());
@@ -63,7 +54,7 @@ public final class JwtUtils {
 		builder.withJWTId(DigestUtils.md5DigestAsHex(UUID.randomUUID().toString().getBytes()));
 
 		// 签名是有谁生成 例如 服务器
-		builder.withIssuer(jwtProperties.getIssuer());
+		builder.withIssuer(JWT_PROPERTIES.getIssuer());
 
 		// 签名的对象，jwt所面向的用户，类似用户id
 		builder.withSubject(subject);
@@ -86,7 +77,7 @@ public final class JwtUtils {
 		}
 
 		/* Signature（签名）*/
-		return builder.sign(Algorithm.HMAC256(jwtProperties.getSignSecret()));
+		return builder.sign(Algorithm.HMAC256(JWT_PROPERTIES.getSignSecret()));
 	}
 
 
@@ -97,9 +88,9 @@ public final class JwtUtils {
 	 * @return 解析后的 jwt，包含头、负载、签名
 	 * @throws JWTVerificationException the jwt verification exception
 	 */
-	public DecodedJWT parse(String token) throws JWTVerificationException {
-		JWTVerifier verifier = JWT.require(Algorithm.HMAC256(jwtProperties.getSignSecret()))
-				.withIssuer(jwtProperties.getIssuer())
+	public static DecodedJWT parse(String token) throws JWTVerificationException {
+		JWTVerifier verifier = JWT.require(Algorithm.HMAC256(JWT_PROPERTIES.getSignSecret()))
+				.withIssuer(JWT_PROPERTIES.getIssuer())
 				.build();
 		return verifier.verify(token);
 	}
@@ -110,8 +101,8 @@ public final class JwtUtils {
 	 * @param token the token
 	 * @return the string
 	 */
-	public String subject(String token) {
-		return this.parse(token).getSubject();
+	public static String subject(String token) throws JWTVerificationException {
+		return parse(token).getSubject();
 	}
 
 	/**
@@ -120,18 +111,7 @@ public final class JwtUtils {
 	 * @param token the token
 	 * @return the list
 	 */
-	public List<String> audience(String token) {
-		return this.parse(token).getAudience();
-	}
-
-
-	/**
-	 * 计算过期时间
-	 *
-	 * @param expiresIn 时间，单位：秒，过期时间 = 当前时间 + expiresIn
-	 * @return the date
-	 */
-	public Date calculationExpiresAt(long expiresIn) {
-		return new Date(System.currentTimeMillis() + expiresIn * 1000);
+	public static List<String> audience(String token) throws JWTVerificationException {
+		return parse(token).getAudience();
 	}
 }

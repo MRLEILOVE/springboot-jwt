@@ -4,15 +4,13 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.leigq.www.jwt.annotation.PassToken;
 import com.leigq.www.jwt.bean.Response;
-import com.leigq.www.jwt.config.JwtProperties;
+import com.leigq.www.jwt.bean.UserContext;
 import com.leigq.www.jwt.entity.User;
 import com.leigq.www.jwt.service.UserService;
-import com.leigq.www.jwt.util.CookieUtils;
 import com.leigq.www.jwt.util.IpUtils;
 import com.leigq.www.jwt.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,13 +38,9 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
 	private final UserService userService;
-	private final JwtUtils jwtUtils;
-	private final JwtProperties jwtProperties;
 
-	public UserController(UserService userService, JwtUtils jwtUtils, JwtProperties jwtProperties) {
+	public UserController(UserService userService) {
 		this.userService = userService;
-		this.jwtUtils = jwtUtils;
-		this.jwtProperties = jwtProperties;
 	}
 
 	/**
@@ -58,7 +52,7 @@ public class UserController {
 	 */
 	@PassToken
 	@RequestMapping("/login")
-	public Response login(String userName, String passWord, HttpServletRequest request, HttpServletResponse response) {
+	public Response login(String userName, String passWord) {
 		// 根据 userName 去数据库查询用户，这里我省略就不去查询数据库了，使用模拟数据
 		User user = User.builder().id(10010L).userName("admin").passWord("123456").mobile("11111111111").build();
 
@@ -66,7 +60,7 @@ public class UserController {
 			return Response.fail("用户名或密码错误！");
 		}
 
-		return Response.success(userService.buildLoginUser(user, request, response));
+		return Response.success(userService.buildLoginUser(user));
 	}
 
 
@@ -80,20 +74,20 @@ public class UserController {
 	public Response refreshToken(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			// 获取 token
-			final String token = CookieUtils.getCookieValue(request, jwtProperties.getTokenCookieName());
+            final String token = UserContext.getToken();
 			if (StringUtils.isNotBlank(token)) {
 				return Response.fail("token还未失效，无需刷新");
 			}
 
 			// 获取 refreshToken
-			final String refreshToken = CookieUtils.getCookieValue(request, jwtProperties.getRefreshTokenCookieName());
+			final String refreshToken = UserContext.getRefreshToken();
 
 			if (StringUtils.isBlank(refreshToken)) {
 				return Response.fail("登录失效，请重新登录");
 			}
 
 			// 解析 refreshToken
-			final DecodedJWT decodedJwt = jwtUtils.parse(new String(Base64Utils.decodeFromString(refreshToken)));
+			final DecodedJWT decodedJwt = JwtUtils.parse(refreshToken);
 
 			// 获取用户id
 			final String userId = decodedJwt.getSubject();
@@ -107,7 +101,7 @@ public class UserController {
 			if (!IpUtils.realIp(request).equals(ip)) {
 				return Response.fail("refreshToken无效，请重新登录");
 			}
-			return Response.success(userService.buildLoginUser(new User(Long.parseLong(userId), userName, "11111111111", ""), request, response));
+			return Response.success(userService.buildLoginUser(new User(Long.parseLong(userId), userName, "11111111111", "")));
 		} catch (JWTVerificationException e) {
 			log.error("refreshToken解析失败:", e);
 			return Response.fail("refreshToken解析失败");

@@ -46,4 +46,16 @@ public class RedisTokenStore {
 		return redisUtils.string.get(String.format(RedisCacheKey.CACHE_USER_KEY_FORMAT, userId, scope.getPlatform()));
 	}
 
+
+    /**
+     * delete
+     *
+     * @param userId the user id
+     * @param scope  the scope
+     * @return the boolean
+     */
+    public Boolean del(long userId, Platform scope) {
+        return redisUtils.common.delete(String.format(RedisCacheKey.CACHE_USER_KEY_FORMAT, userId, scope.getPlatform()));
+    }
+
 }

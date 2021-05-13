@@ -5,17 +5,12 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.leigq.www.jwt.annotation.PassToken;
 import com.leigq.www.jwt.bean.CacheLoginUser;
-import com.leigq.www.jwt.config.JwtProperties;
-import com.leigq.www.jwt.service.RedisTokenStore;
-import com.leigq.www.jwt.util.CookieUtils;
-import com.leigq.www.jwt.util.DeviceUtils;
+import com.leigq.www.jwt.bean.UserContext;
 import com.leigq.www.jwt.util.IpUtils;
 import com.leigq.www.jwt.util.JwtUtils;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -31,13 +26,8 @@ import java.util.Objects;
  * @author leigq
  */
 @Slf4j
-@RequiredArgsConstructor
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
-
-	private final JwtProperties jwtProperties;
-	private final JwtUtils jwtUtils;
-	private final RedisTokenStore redisTokenStore;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -54,8 +44,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			return true;
 		}
 
-		// 从 Cookie 中取出 token
-		final String token = CookieUtils.getCookieValue(request, jwtProperties.getTokenCookieName());
+		// 获取用户 token
+        final String token = UserContext.getToken();
 
 		// 剩余请求都需要登录
 		if (StringUtils.isBlank(token)) {
@@ -63,17 +53,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		}
 
 		try {
-			// 解析 jwt
-			final DecodedJWT decodedJwt = jwtUtils.parse(new String(Base64Utils.decodeFromString(token)));
-
-			// 获取 token 中的 userId
-			String userId = decodedJwt.getSubject();
-
-			// 获取 token 中的 audience (用户名)
-			log.info("userName = {}", decodedJwt.getAudience().get(0));
-
-			// 根据 userId 去缓存查询用户，在这里可以增加自己项目的业务，比如：判断用户是否被禁用
-			final CacheLoginUser cacheUser = redisTokenStore.get(Long.parseLong(userId), DeviceUtils.platform(request));
+			// 获取缓存用户，在这里可以增加自己项目的业务，比如：判断用户是否被禁用
+			final CacheLoginUser cacheUser = UserContext.getCacheUser();
 			if (Objects.isNull(cacheUser)) {
 				throw new ServiceException("登录失效，请重新登录!");
 			}
@@ -82,6 +63,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			if (!cacheUser.getToken().equals(token)) {
 				throw new ServiceException("登录失效，请重新登录!");
 			}
+
+			// 解码JWT
+            final DecodedJWT decodedJwt = JwtUtils.parse(token);
+
+            // 获取 token 中的 audience (用户名)
+            log.info("userName = {}", decodedJwt.getAudience().get(0));
 
 			// Claim中存放的内容是JWT自身的标准属性
 			Map<String, Claim> claims = decodedJwt.getClaims();
